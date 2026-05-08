@@ -1,0 +1,28 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import firebaseConfig from '../../firebase-applet-config.json';
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
+
+async function testConnection() {
+  try {
+    // We try to fetch a dummy doc to verify Firestore connectivity
+    await getDocFromServer(doc(db, 'test', 'connectivity_check'));
+  } catch (error: any) {
+    // If it's a permission error, it means we ARE connected but just can't read 'test'
+    if (error.code === 'permission-denied') {
+      return;
+    }
+    // If it's a configuration error (rarely reported this way but possible)
+    if (error.message?.includes('the client is offline') || error.code === 'unavailable') {
+      console.warn("Firestore connection check failed: Please ensure you have created a Firestore database in your Firebase Console and enabled read/write access (test mode or appropriate rules).");
+    }
+  }
+}
+
+testConnection();

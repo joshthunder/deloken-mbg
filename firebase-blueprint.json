@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "full_name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone_number": { "type": "string" },
+        "school_name": { "type": "string" },
+        "category": { "type": "string", "enum": ["student", "parent", "teacher", "public"] },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["full_name", "email", "phone_number", "category", "role", "created_at"]
+    },
+    "School": {
+      "title": "School",
+      "description": "School information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "province": { "type": "string" },
+        "city": { "type": "string" }
+      },
+      "required": ["name", "province", "city"]
+    },
+    "SPPG": {
+      "title": "SPPG",
+      "description": "Service Provider (Satuan Pelayanan Program Gizi)",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "province": { "type": "string" },
+        "city": { "type": "string" },
+        "average_rating": { "type": "number" },
+        "total_reports": { "type": "number" }
+      },
+      "required": ["name", "province", "city"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "MBG Quality Report",
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "school_id": { "type": "string" },
+        "school_name": { "type": "string" },
+        "sppg_id": { "type": "string" },
+        "sppg_name": { "type": "string" },
+        "province": { "type": "string" },
+        "city": { "type": "string" },
+        "report_date": { "type": "string", "format": "date" },
+        "food_delivered": { "type": "boolean" },
+        "on_time": { "type": "boolean" },
+        "portion_enough": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "complaint": { "type": "string" },
+        "photo_url": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "completed"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["user_id", "school_name", "sppg_name", "province", "city", "report_date", "rating", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "Users collection" },
+    "/schools/{schoolId}": { "schema": "School", "description": "Schools collection" },
+    "/sppgs/{sppgId}": { "schema": "SPPG", "description": "SPPG collection" },
+    "/reports/{reportId}": { "schema": "Report", "description": "Reports collection" }
+  }
+}
